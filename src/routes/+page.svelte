@@ -9,16 +9,22 @@
 	];
 
 	function playProgression() {
+		Tone.Transport.cancel();
+		Tone.Transport.start();
 		const synth = new Tone.Synth().toDestination();
 		const seq = new Tone.Sequence((time, note) => {
 			synth.triggerAttackRelease(note, 0.1, time);
 		}, selectedProgression).start(0);
-		Tone.Transport.start();
+	}
+
+	function stopProgression() {
+		Tone.Transport.clear();
+		Tone.Transport.stop();
 	}
 </script>
 
 <div class="bg-gray-800 min-h-screen flex flex-col items-center justify-center p-4 text-center">
-	<h1 class="text-white font-medium">Chord Progression Generator</h1>
+	<h1 class="text-white font-bold">Chord Progression Generator</h1>
 	<div class="flex justify-center m-4">
 		<label for="progression" class="text-white font-medium m-2">Chord Progression:</label>
 		<select id="progression" bind:value={selectedProgression}>
@@ -27,12 +33,18 @@
 			{/each}
 		</select>
 	</div>
-	<div class="flex justify-center m-4">
+	<div class="flex justify-center">
 		<button
 			class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full m-2"
 			on:click={playProgression}
 		>
 			Play Progression
+		</button>
+		<button
+			class="bg-red-500 text-white font-bold py-2 px-4 rounded-full m-2"
+			on:click={stopProgression}
+		>
+			Stop Progression
 		</button>
 	</div>
 </div>
