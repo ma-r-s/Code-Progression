@@ -1,53 +1,42 @@
 <script>
 	import * as Tone from 'tone';
-
-	const chords = [
-		['C4', 'G4', 'A4', 'D5'],
-		['F3', 'C4', 'G4', 'A4'],
-		['G3', 'D4', 'A4', 'E5']
-	];
-	let selectedProgression = chords[0];
-
-	function playProgression() {
-		Tone.Transport.cancel();
-		let synth = new Tone.PolySynth().toDestination();
-		new Tone.Sequence(
-			(time, note) => {
-				synth.triggerAttackRelease(note, '8n', time);
-			},
-			selectedProgression,
-			'8n'
-		).start();
-		Tone.Transport.start();
-	}
-	function stopProgression() {
-		Tone.Transport.clear();
-		Tone.Transport.stop();
-	}
+	import { Canvas } from '@threlte/core';
+	import Scene from './Scene.svelte';
 </script>
 
-<div class="bg-gray-800 min-h-screen flex flex-col items-center justify-center p-4 text-center">
-	<h1 class="text-white font-medium">Chord Progression Generator</h1>
-	<div class="flex justify-center m-4">
-		<label for="progression" class="text-white font-medium m-2">Chord Progression:</label>
-		<select id="progression" bind:value={selectedProgression}>
-			{#each chords as chord}
-				<option value={chord}>{chord.join(' - ')}</option>
-			{/each}
-		</select>
+<div
+	class="bg-zinc-900 min-h-screen flex flex-col items-center justify-center p-4 text-center gap-5"
+>
+	<div class="basis-1 grow border w-full">
+		<Canvas>
+			<Scene />
+		</Canvas>
 	</div>
-	<div class="flex justify-center m-4">
-		<button
-			class="bg-blue-500 text-white font-bold py-2 px-4 rounded-full m-2"
-			on:click={playProgression}
-		>
-			Play Progression
-		</button>
-		<button
-			class="bg-red-500 text-white font-bold py-2 px-4 rounded-full m-2"
-			on:click={stopProgression}
-		>
-			Stop Progression
-		</button>
+	<div class="grid grid-cols-4 grid-rows-3 w-full grow basis-1">
+		{#each Array(11) as grid}
+			<div class="bg-zinc-800 border flex items-center justify-center">
+				<svg viewBox="0 0 20 20" fill="currentColor" class="w-12">
+					<circle cx="10" cy="10" r="10" fill="white" />
+					<line
+						x1="5"
+						y1="10"
+						x2="15"
+						y2="10"
+						stroke="black"
+						stroke-linecap="round"
+						stroke-width="2"
+					/>
+					<line
+						y1="5"
+						x1="10"
+						y2="15"
+						x2="10"
+						stroke="black"
+						stroke-linecap="round"
+						stroke-width="2"
+					/>
+				</svg>
+			</div>
+		{/each}
 	</div>
 </div>
